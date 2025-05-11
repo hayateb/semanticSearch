@@ -1,35 +1,38 @@
-# semanticSearch
+# sv
 
-## This code works for searching context based for user querys in python
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-# introduction 
+## Creating a project
 
-----------------------------------------------------------
-### Semantic search means seraching mechanism that retrives the context similarity based for user queries instead of key based seraching.
+If you're seeing this, you've probably already done this step. Congrats!
 
-### it tries to understand the user intention behind the query and answer based on that
+```bash
+# create a new project in the current directory
+npx sv create
 
-### It helps for diffrent application and search engine algthorithms.
+# create a new project in my-app
+npx sv create my-app
+```
 
---------------------------------------------------------
-# feautres 
-### Allows users to upload their own documents
-### handle follow-up questions
-### Question Answering (QA) Module
+## Developing
 
---------------------------------------------------
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-# Installation
+```bash
+npm run dev
 
-## Clone the repository and install the dependencies:
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
 
-### git clone https://github.com/hayateb/semanticSearch.git
+## Building
 
-### cd semanticSearch 
-### pip install -r requirements.txt
+To create a production version of your app:
 
-----------------------------------------------------------
+```bash
+npm run build
+```
 
-# Usage
+You can preview the production build with `npm run preview`.
 
-### python semantic_search.py
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
