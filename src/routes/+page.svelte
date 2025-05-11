@@ -1,4 +1,34 @@
 <script lang="ts">
+      let file = []
+      let query = "";
+      let searchResults = [];
+      let isLoading = false;
+      let sending = false;
+      let search = '';
+
+       function handleFileUpload(event: { target: { files: any; }; }) {
+            const selectedFiles = event.target.files;
+            if (selectedFiles.length > 0) {
+                  file = selectedFiles[0];
+                  console.log('Selected file:', file);
+            }
+      }
+      function handleQueryChange(event: { target: { value: any; }; }) {
+            query = event.target.value;
+            console.log('Query:', query);
+      }
+      function handleSearch() {
+            isLoading = true;
+            sending = true;
+            console.log('Searching for:', search);
+      
+            setTimeout(() => {
+                  searchResults = ['Result 1', 'Result 2', 'Result 3'];
+                  isLoading = false;
+                  sending = false;
+            }, 2000);
+      }
+
        
 </script>
 
@@ -6,15 +36,14 @@
       <div class="card"> 
             <div class="search">
                   <input class ="sqaure" type="text" placeholder="semantic search" />
-                  <button class="button">🔍</button>    
+                  <button class="button" on:change={handleSearch}>🔍</button>    
             </div>
             <div>
-                  <h3 class="text">Upload Your Files</h3>
-                  <button class="primary-button">Browse</button>
+                  <input type="file" class = "input-id" multiple on:change={handleFileUpload} />
             </div>
             <div class = "input">
-                  <input class= "query" type = text placeholder="Enter your query" />
-                  <button class="circle"> ⮝</button>
+                  <input class= "query" type = "text"  placeholder="Enter your query" />
+                  <button class="circle" multiple on:change={handleQueryChange}> ⮝</button>
             </div>
                
       </div>
@@ -62,8 +91,11 @@
   cursor: pointer;
   font-size: 18px;
 }
-
-  .primary-button {
+.input-id {
+      margin-top: 50px;
+      margin-left: 100px; 
+}
+  /* . {
     background-color: #1890ff;
     color: white;
     border: none;
@@ -72,15 +104,15 @@
     cursor: pointer;
     height: 40px;
       width: 100px;
-  }
+  } */
  
-  .primary-button:hover {
+  /* .primary-button:hover {
     background-color: #40a9ff;
-  }
-  .text {
+  } */
+  /* .text {
     text-align: center;
     margin-bottom: 16px;
-  }
+  } */
  .input {
       position: relative;
       width: 100%;
