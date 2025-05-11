@@ -1,18 +1,33 @@
 <script lang="ts">
-      let file = []
+      let file  = []
       let query = "";
       let searchResults = [];
       let isLoading = false;
       let sending = false;
       let search = '';
 
-       function handleFileUpload(event: { target: { files: any; }; }) {
+       async function handleFileUpload(event: { target: { files: any; }; }) {
             const selectedFiles = event.target.files;
             if (selectedFiles.length > 0) {
                   file = selectedFiles[0];
                   console.log('Selected file:', file);
             }
+            const formData = new FormData();
+            formData.append('file', file);
+            try {
+                  const response = await fetch('http://localhost:8000/uploadfile/', {
+                  method: 'POST',
+                  body: formData,
+            });
+            const data = await response.json();
+            console.log('Upload response:', data);
+            }
+            catch (error) {
+                  console.error('Error uploading file:', error);
+            }
+            
       }
+
       function handleQueryChange(event: { target: { value: any; }; }) {
             query = event.target.value;
             console.log('Query:', query);
@@ -28,6 +43,8 @@
                   sending = false;
             }, 2000);
       }
+
+
 
        
 </script>
