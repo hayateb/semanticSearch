@@ -1,11 +1,23 @@
 from io import BytesIO
+import string
 import pandas as pd
 import fitz
+import nltk 
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from fastapi import FastAPI , File , UploadFile 
+
+
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
 
 app = FastAPI()
 @app.post("/uploadfile/")
@@ -20,7 +32,7 @@ async def create_upload_file(file: UploadFile = File(...)):
 async def read_root():
     return {"message": "welcome to the semantic search API"}
 
-def preprocess_file(contents , filetype):
+def extract_file(contents , filetype):
       parser ={
               'csv': pd.read_csv,
               'json': pd.read_json,
@@ -40,4 +52,18 @@ def extract_text_from_pdf(contents):
           text += page.get_text()
       pdf_document.close()
       return text
+def preprocess_text(text):
+      if not text:
+            return "" 
+  
+      text = text.lower()
+      clean_text = text.translate(str.maketrans ('','', string.punctuation))
       
+      token = word_tokenize(clean_text)
+      stop_words = set(stopwords.words('english'))
+      tokens = [word for word in token if word not in stop_words]
+      lemmatizer = nltk.stem.WordNetLemmatizer()
+      lemmatized_tokens = [lemmatizer.lemmatize(word) for word in tokens]
+      
+      return ' '.join(lemmatized_tokens)
+
