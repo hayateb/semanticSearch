@@ -1,5 +1,5 @@
 <script lang="ts">
-      let file  = []
+      let file: File | null = null;
       let query = "";
       let searchResults = [];
       let isLoading = false;
@@ -13,7 +13,11 @@
                   console.log('Selected file:', file);
             }
             const formData = new FormData();
-            formData.append('file', file);
+            if (file) {
+                  formData.append('file', file);
+            } else {
+                  console.error('No file selected');
+            }
             try {
                   const response = await fetch('http://localhost:8000/uploadfile/', {
                   method: 'POST',
@@ -28,11 +32,26 @@
             
       }
 
-      function handleQueryChange(event: { target: { value: any; }; }) {
+      async function handleQueryChange(event: { target: { value: any; }; }) {
             query = event.target.value;
             console.log('Query:', query);
+
+            try {
+                  const response = await fetch('http://localhost:8000/query/', {
+                        method: 'POST',
+                        headers: {
+                              'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                  });
+                  const data = await response.json();
+                  console.log('Query response:', data);
+            } catch (error) {
+                  console.error('Error sending query:', error);
+            }
       }
-      function handleSearch() {
+
+      async function handleSearch() {
             isLoading = true;
             sending = true;
             console.log('Searching for:', search);
@@ -42,6 +61,20 @@
                   isLoading = false;
                   sending = false;
             }, 2000);
+
+            try {
+                  const response = await fetch('http://localhost:8000/search/', {
+                        method: 'POST',
+                        headers: {
+                              'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ search }),
+                  });
+                  const data = await response.json();
+                  console.log('Search response:', data);
+            } catch (error) {
+                  console.error('Error sending search:', error);
+            }
       }
 
 
@@ -52,15 +85,15 @@
 <div class ="container">
       <div class="card"> 
             <div class="search">
-                  <input class ="sqaure" type="text" placeholder="semantic search" />
+                  <input class ="sqaure" type="text" placeholder="semantic search"    bind:value={search}/>
                   <button class="button" on:change={handleSearch}>🔍</button>    
             </div>
             <div>
-                  <input type="file" class = "input-id" multiple on:change={handleFileUpload} />
+                  <input type="file" class = "input-id" multiple on:change={handleFileUpload}/>
             </div>
             <div class = "input">
-                  <input class= "query" type = "text"  placeholder="Enter your query" />
-                  <button class="circle" multiple on:change={handleQueryChange}> ⮝</button>
+                  <input class="query" type="text" placeholder="Enter your query" bind:value={query} />
+                  <button class="circle" multiple on:click={handleQueryChange}> ⮝</button>
             </div>
                
       </div>

@@ -15,18 +15,7 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 
 
-app = FastAPI()
-@app.post("/uploadfile/")
 
-
-async def create_upload_file(file: UploadFile = File(...)):
-      contents = await file.read()
-      df = pd.read_csv(BytesIO(contents))
-      return {"filename" : file.filename}
-
-@app.get("/")
-async def read_root():
-    return {"message": "welcome to the semantic search API"}
 
 def extract_file(contents , filetype):
       parser ={
