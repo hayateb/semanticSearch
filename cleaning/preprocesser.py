@@ -5,12 +5,8 @@ import fitz
 import nltk 
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
+from nltk.stem import WordNetLemmatizer as Lemmatizer
 
-from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import FunctionTransformer
 from fastapi import FastAPI , File , UploadFile 
 
 
