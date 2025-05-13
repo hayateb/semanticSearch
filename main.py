@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from io import BytesIO
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -11,7 +12,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["*"],
     allow_origins=origins,
     allow_headers=["*"],
     
@@ -33,19 +34,31 @@ async def read_root():
     return {"message": "welcome to the file upload  API"}
 
 
+class QueryRequest(BaseModel):
+    query: str
+    
 @app.post("/query/")
-async def query_file(str):
+
+async def query_file(request: QueryRequest):
       try:
-      
-            return {"query": str, "message": "Query processed successfully"}
+            request = request.query 
+            return {"query": request, "message": "Query processed successfully"}
       except Exception as e:
             return {"error": f"An error occurred: {str(e)}"}
     
+@app.get('/q')
+async def get_query():
+    return {"message": "Query endpoint"}
 
-@app.post("search/")
-async def search_file(str):
+
+
+class SearchRequest(BaseModel):
+    search: str
+    
+@app.post("/search/")
+async def search_file(request: SearchRequest):
       try:
-
-            return {"search": str, "message": "Search processed successfully"}
+            search = request.search
+            return {"search": search, "message": "Search processed successfully"}
       except Exception as e:
             return {"error": f"An error occurred: {str(e)}"}

@@ -34,7 +34,10 @@
 
       async function handleQueryChange(event: { target: { value: any; }; }) {
             query = event.target.value;
-            console.log('Query:', query);
+            console.log('jkkkkkkkkkkkkkkkkkkkkkkkkkk:', query);
+
+
+            sending = true;
 
             try {
                   const response = await fetch('http://localhost:8000/query/', {
@@ -85,8 +88,8 @@
 <div class ="container">
       <div class="card"> 
             <div class="search">
-                  <input class ="sqaure" type="text" placeholder="semantic search"    bind:value={search}/>
-                  <button class="button" on:change={handleSearch}>🔍</button>    
+                  <input class ="sqaure" type="text" placeholder="semantic search"  bind:value={search}/>
+                  <button class="button" on:click={handleSearch}>🔍</button>    
             </div>
             <div>
                   <input type="file" class = "input-id" multiple on:change={handleFileUpload}/>
