@@ -1,8 +1,22 @@
 from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from io import BytesIO
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_origins=origins,
+    allow_headers=["*"],
+    
+    
+)
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
     try:
