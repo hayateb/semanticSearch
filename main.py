@@ -52,13 +52,13 @@ async def get_query():
 
 
 
-class SearchRequest(BaseModel):
-    search: str
+# class SearchRequest(BaseModel):
+#     search: str
     
-@app.post("/search/")
-async def search_file(request: SearchRequest):
-      try:
-            search = request.search
-            return {"search": search, "message": "Search processed successfully"}
-      except Exception as e:
-            return {"error": f"An error occurred: {str(e)}"}
+# @app.post("/search/")
+# async def search_file(request: SearchRequest):
+#       try:
+#             search = request.search
+#             return {"search": search, "message": "Search processed successfully"}
+#       except Exception as e:
+#             return {"error": f"An error occurred: {str(e)}"}

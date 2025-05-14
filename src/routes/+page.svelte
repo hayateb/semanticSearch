@@ -94,6 +94,12 @@
             <div>
                   <input type="file" class = "input-id" multiple on:change={handleFileUpload}/>
             </div>
+            <div>
+                  data
+            </div>
+
+
+
             <div class = "input">
                   <input class="query" type="text" placeholder="Enter your query" bind:value={query} />
                   <button class="circle" multiple on:click={handleQueryChange}> ⮝</button>

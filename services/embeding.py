@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer
-from semanticSearch.cleaning.preprocesser import preprocess_text
+from semanticSearch.services.preprocesser import preprocess_text
 import pandas as pd
 import numpy as np
 
