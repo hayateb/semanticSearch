@@ -54,31 +54,31 @@
             }
       }
 
-      async function handleSearch() {
-            isLoading = true;
-            sending = true;
-            console.log('Searching for:', search);
+      // async function handleSearch() {
+      //       isLoading = true;
+      //       sending = true;
+      //       console.log('Searching for:', search);
       
-            setTimeout(() => {
-                  searchResults = ['Result 1', 'Result 2', 'Result 3'];
-                  isLoading = false;
-                  sending = false;
-            }, 2000);
+      //       setTimeout(() => {
+      //             searchResults = ['Result 1', 'Result 2', 'Result 3'];
+      //             isLoading = false;
+      //             sending = false;
+      //       }, 2000);
 
-            try {
-                  const response = await fetch('http://localhost:8000/search/', {
-                        method: 'POST',
-                        headers: {
-                              'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ search }),
-                  });
-                  const data = await response.json();
-                  console.log('Search response:', data);
-            } catch (error) {
-                  console.error('Error sending search:', error);
-            }
-      }
+      //       try {
+      //             const response = await fetch('http://localhost:8000/search/', {
+      //                   method: 'POST',
+      //                   headers: {
+      //                         'Content-Type': 'application/json',
+      //                   },
+      //                   body: JSON.stringify({ search }),
+      //             });
+      //             const data = await response.json();
+      //             console.log('Search response:', data);
+      //       } catch (error) {
+      //             console.error('Error sending search:', error);
+      //       }
+      // }
 
 
 
@@ -87,10 +87,10 @@
 
 <div class ="container">
       <div class="card"> 
-            <div class="search">
+            <!-- <div class="search">
                   <input class ="sqaure" type="text" placeholder="semantic search"  bind:value={search}/>
                   <button class="button" on:click={handleSearch}>🔍</button>    
-            </div>
+            </div> -->
             <div>
                   <input type="file" class = "input-id" multiple on:change={handleFileUpload}/>
             </div>
@@ -120,30 +120,7 @@
     height: 100%;
     width: 100%;
   }
-  .search {
-  position: relative;
-  width: 100%;
-  max-width: 600px;
-  margin-left: auto;
-}
-.sqaure {
-      
-  width: 100%;
-  padding: 10px 40px 10px 12px; /* padding-right for button space */
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-.button {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #1890ff;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-}
+ 
 .input-id {
       margin-top: 50px;
       margin-left: 100px; 
