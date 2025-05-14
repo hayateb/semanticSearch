@@ -1,6 +1,7 @@
 <script lang="ts">
       let file: File | null = null;
       let query = "";
+      let data: any = null; // Declare and initialize 'data'
       let searchResults = [];
       let isLoading = false;
       let sending = false;
@@ -23,7 +24,7 @@
                   method: 'POST',
                   body: formData,
             });
-            const data = await response.json();
+            data = await response.json();
             console.log('Upload response:', data);
             }
             catch (error) {
@@ -32,8 +33,8 @@
             
       }
 
-      async function handleQueryChange(event: { target: { value: any; }; }) {
-            query = event.target.value;
+      async function handleQueryChange() {
+            
             console.log('jkkkkkkkkkkkkkkkkkkkkkkkkkk:', query);
 
 
@@ -47,13 +48,44 @@
                         },
                         body: JSON.stringify({ query }),
                   });
-                  const data = await response.json();
+                  data = await response.json();
                   console.log('Query response:', data);
+
+                  query = "";
+            } catch (error) {
+                  console.error('Error sending query:', error);
+            }
+      }
+      async function getData(){
+            try{
+                  const response = await fetch('http://localhost:8000/uploaddone/', {
+                        method: 'GET',
+                        headers: {
+                              'Content-Type': 'application/json',
+                        },
+                  });
+                  data = await response.json();
+                  console.log('dataresponse:', data);
+            } catch (error) {
+                  console.error('Error sending query:', error);
+            }
+      }
+      async function getresponse (){
+            try{
+                  const response = await fetch('http://localhost:8000/q/', {
+                        method: 'GET',
+                        headers: {
+                              'Content-Type': 'application/json',
+                        },
+                  });
+                  data = await response.json();
+                  console.log('dataresponse:', data);
             } catch (error) {
                   console.error('Error sending query:', error);
             }
       }
 
+      
       // async function handleSearch() {
       //       isLoading = true;
       //       sending = true;
@@ -95,14 +127,18 @@
                   <input type="file" class = "input-id" multiple on:change={handleFileUpload}/>
             </div>
             <div>
-                  data
+                  {#if data}
+                        <div>
+                              <pre>{JSON.stringify (data) }</pre>
+                        </div>
+                  {/if}
             </div>
 
 
 
             <div class = "input">
-                  <input class="query" type="text" placeholder="Enter your query" bind:value={query} />
-                  <button class="circle" multiple on:click={handleQueryChange}> ⮝</button>
+                  <input class="query" type="text" placeholder="Enter your query" bind:value={query} on:keydown={(event) => {if (event.key === "Enter") {handleQueryChange()}}}/>
+                  <button class="circle"  on:click={handleQueryChange}> ⮝</button>
             </div>
                
       </div>

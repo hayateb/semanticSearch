@@ -4,6 +4,7 @@ import pandas as pd
 from io import BytesIO
 from pydantic import BaseModel
 
+
 app = FastAPI()
 
 origins = [
@@ -21,15 +22,16 @@ app.add_middleware(
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
     try:
-        contents = await file.read()
-        # Attempt to decode with utf-8 and fallback to other encodings if needed
-        df = pd.read_csv(BytesIO(contents), encoding='utf-8', errors='replace')
-        return {"filename": file.filename, "message": "File processed successfully"}
-    except UnicodeDecodeError:
-        return {"error": "File encoding is not supported. Please upload a valid CSV file."}
+        content = await file.read()
+        raw_text = content.decode("utf-8").tolist()
+        filetype = file.filename.split(".")[-1]
+
+        
+        return {"filename": file.filename}
     except Exception as e:
         return {"error": f"An error occurred: {str(e)}"}
-@app.get("/")
+
+@app.get("/uploaddone")
 async def read_root():
     return {"message": "welcome to the file upload  API"}
 
@@ -42,7 +44,7 @@ class QueryRequest(BaseModel):
 async def query_file(request: QueryRequest):
       try:
             request = request.query 
-            return {"query": request, "message": "Query processed successfully"}
+            return {}
       except Exception as e:
             return {"error": f"An error occurred: {str(e)}"}
     

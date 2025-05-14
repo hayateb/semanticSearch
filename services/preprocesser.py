@@ -49,6 +49,7 @@ def preprocess_text(text):
       tokens = [word for word in token if word not in stop_words]
       lemmatizer = nltk.stem.WordNetLemmatizer()
       lemmatized_tokens = [lemmatizer.lemmatize(word) for word in tokens]
+      preprocceser = ' '.join(lemmatized_tokens)
       
-      return ' '.join(lemmatized_tokens)
+      return preprocceser
 
