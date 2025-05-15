@@ -1,7 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-import pandas as pd
-from io import BytesIO
 from pydantic import BaseModel
 from typing import List
 
@@ -9,72 +7,56 @@ from services.embeding import embed_chunks, embed_query
 from services.semanticSearch import semantic_search
 from services.preprocesser import parse_uploaded_files
 
-
 app = FastAPI()
-context_histrory = []
+context_history = []
 
-origins = [
-    "http://localhost:5173",
-]
+# In-memory store for uploaded content
+stored_chunks = []
+stored_metadata = []
 
+# CORS setup
+origins = ["http://localhost:5173"]
 app.add_middleware(
     CORSMiddleware,
     allow_methods=["*"],
     allow_origins=origins,
     allow_headers=["*"],
-    
-    
 )
+
+# UploadFile endpoint
 @app.post("/uploadfile/")
-class Request(BaseModel):
-    query: str
+async def create_upload_file(files: List[UploadFile] = File(...)):
+    global stored_chunks, stored_metadata
+    docs = await parse_uploaded_files(files)
+    if not docs:
+        return {"message": "No valid files were parsed."}
     
-async def create_upload_file(files: list[UploadFile] = File(...)):
-        docs = await parse_uploaded_files(files)
-        if not docs:
-            return {"message": "No valid files were parsed."}
-        
-        chunks, metadata = embed_chunks(docs)
-        query = " ".join([doc["text"] for doc in docs])
-        query_vec = embed_query(query)
-        results = semantic_search(query_vec)
-        return {
-            "message": "Files processed",
-            "chunks": len(chunks),
-            "top_3_results": results
+    chunks, metadata = embed_chunks(docs)
+    stored_chunks = chunks
+    stored_metadata = metadata
+    
+    return {
+        "message": "Files processed and embedded",
+        "chunks": len(chunks)
     }
-   
 
-@app.get("/uploaddone")
-async def read_root():
-    return {"message": "File uploaded successfully"}
-
-
+# Query endpoint
 class QueryRequest(BaseModel):
     query: str
-    
+
 @app.post("/query/")
-
 async def query_file(request: QueryRequest):
-      try:
-            request = request.query 
-            return {}
-      except Exception as e:
-            return {"error": f"An error occurred: {str(e)}"}
-    
-@app.get('/q')
-async def get_query():
-    return {"message": "Query endpoint"}
+    global stored_chunks, stored_metadata
 
+    if not stored_chunks:
+        return {"message": "No file has been uploaded yet."}
 
-
-# class SearchRequest(BaseModel):
-#     search: str
-    
-# @app.post("/search/")
-# async def search_file(request: SearchRequest):
-#       try:
-#             search = request.search
-#             return {"search": search, "message": "Search processed successfully"}
-#       except Exception as e:
-#             return {"error": f"An error occurred: {str(e)}"}
+    try:
+        query_vec = embed_query(request.query)
+        results = semantic_search(query_vec, stored_chunks, stored_metadata)
+        return {
+            "query": request.query,
+            "top_3_results": results
+        }
+    except Exception as e:
+        return {"error": f"An error occurred: {str(e)}"}
