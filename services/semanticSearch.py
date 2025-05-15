@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from embeding import embedded_chunks, chunk_metadata
+from services.embeding import embedded_chunks, chunk_metadata
 
 def semantic_search(query_vec, top_k=3):
     similarities = cosine_similarity([query_vec], embedded_chunks)[0]
