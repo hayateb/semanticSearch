@@ -15,7 +15,7 @@
             }
             const formData = new FormData();
             if (file) {
-                  formData.append('file', file);
+                  formData.append('files', file);
             } else {
                   console.error('No file selected');
             }
@@ -127,13 +127,17 @@
                   <input type="file" class = "input-id" multiple on:change={handleFileUpload}/>
             </div>
             <div>
-                  {#if data}
-                        <div>
-                              <pre>{JSON.stringify (data) }</pre>
+                  {#if data && data.top_3_results}
+                        <div class="document-container">
+                           {#each data.top_3_results as result}
+                                    <div class="doc-page">
+                                          <div class="doc-text">{result.text}</div>
+                                          <div class="page-footer">Page {result.page}</div>
+                                      </div> 
+                          {/each}
                         </div>
                   {/if}
             </div>
-
 
 
             <div class = "input">
@@ -216,6 +220,34 @@
   font-size: 16px;
      
 }
+.document-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.doc-page {
+  border: 1px solid #ddd;
+  width: 80%;
+  max-width: 700px;
+  padding: 30px;
+  margin-bottom: 40px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  position: relative;
+  border-radius: 8px;
+  font-family: "Georgia", serif;
+  line-height: 1.6;
+}
+
+.page-footer {
+  text-align: right;
+  font-size: 14px;
+  color: #888;
+  margin-top: 20px;
+}
+
 
 </style>
   

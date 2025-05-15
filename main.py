@@ -35,10 +35,6 @@ async def create_upload_file(files: List[UploadFile] = File(...)):
     stored_chunks = chunks
     stored_metadata = metadata
     
-    return {
-        "message": "Files processed and embedded",
-        "chunks": len(chunks)
-    }
 
 # Query endpoint
 class QueryRequest(BaseModel):
@@ -47,16 +43,11 @@ class QueryRequest(BaseModel):
 @app.post("/query/")
 async def query_file(request: QueryRequest):
     global stored_chunks, stored_metadata
-
-    if not stored_chunks:
-        return {"message": "No file has been uploaded yet."}
-
     try:
         query_vec = embed_query(request.query)
         results = semantic_search(query_vec, stored_chunks, stored_metadata)
-        return {
-            "query": request.query,
-            "top_3_results": results
-        }
+        return results          
+
+
     except Exception as e:
         return {"error": f"An error occurred: {str(e)}"}

@@ -17,6 +17,11 @@ def embed_chunks(documents):
     return vectors, chunks
 
 def embed_query(query):
-    return model.encode([clean_text(query)])[0]
+    cleaned = clean_text(query)
+    if not cleaned:
+        return np.array([])  # return empty array to catch it early
+    vector = model.encode([cleaned])[0]
+    return np.array(vector)
+
 
 

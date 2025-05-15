@@ -36,7 +36,6 @@ def chunk_documents(docs, chunk_size=300):
             chunk = " ".join(words[i:i+chunk_size])
             chunks.append({
                 "text": chunk,
-                "filename": doc["filename"],
                 "page": doc["page"]
             })
     return chunks
