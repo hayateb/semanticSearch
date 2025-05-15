@@ -56,34 +56,34 @@
                   console.error('Error sending query:', error);
             }
       }
-      async function getData(){
-            try{
-                  const response = await fetch('http://localhost:8000/uploaddone/', {
-                        method: 'GET',
-                        headers: {
-                              'Content-Type': 'application/json',
-                        },
-                  });
-                  data = await response.json();
-                  console.log('dataresponse:', data);
-            } catch (error) {
-                  console.error('Error sending query:', error);
-            }
-      }
-      async function getresponse (){
-            try{
-                  const response = await fetch('http://localhost:8000/q/', {
-                        method: 'GET',
-                        headers: {
-                              'Content-Type': 'application/json',
-                        },
-                  });
-                  data = await response.json();
-                  console.log('dataresponse:', data);
-            } catch (error) {
-                  console.error('Error sending query:', error);
-            }
-      }
+      // async function getData(){
+      //       try{
+      //             const response = await fetch('http://localhost:8000/uploaddone/', {
+      //                   method: 'GET',
+      //                   headers: {
+      //                         'Content-Type': 'application/json',
+      //                   },
+      //             });
+      //             data = await response.json();
+      //             console.log('dataresponse:', data);
+      //       } catch (error) {
+      //             console.error('Error sending query:', error);
+      //       }
+      // }
+      // async function getresponse (){
+      //       try{
+      //             const response = await fetch('http://localhost:8000/q/', {
+      //                   method: 'GET',
+      //                   headers: {
+      //                         'Content-Type': 'application/json',
+      //                   },
+      //             });
+      //             data = await response.json();
+      //             console.log('dataresponse:', data);
+      //       } catch (error) {
+      //             console.error('Error sending query:', error);
+      //       }
+      // }
 
       
       // async function handleSearch() {

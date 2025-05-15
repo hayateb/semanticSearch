@@ -35,7 +35,7 @@ async def create_upload_file(files: List[UploadFile] = File(...)):
     stored_chunks = chunks
     stored_metadata = metadata
     
-
+    return {"metadata":metadata}
 # Query endpoint
 class QueryRequest(BaseModel):
     query: str
