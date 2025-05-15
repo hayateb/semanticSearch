@@ -49,6 +49,7 @@ async def query_file(request: QueryRequest):
         return {
             "top_3_results": results,
             "original_query": request.query
+
         }        
 
 
