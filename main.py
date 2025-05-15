@@ -46,7 +46,10 @@ async def query_file(request: QueryRequest):
     try:
         query_vec = embed_query(request.query)
         results = semantic_search(query_vec, stored_chunks, stored_metadata)
-        return results          
+        return {
+            "top_3_results": results,
+            "original_query": request.query
+        }        
 
 
     except Exception as e:
