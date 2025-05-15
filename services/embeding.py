@@ -1,16 +1,22 @@
 from sentence_transformers import SentenceTransformer
-from semanticSearch.services.preprocesser import preprocess_text
+from services.preprocesser import chunk_documents, clean_text
 import pandas as pd
 import numpy as np
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
-def embed_text(text):
-      if not text:
-            return np.array([])
-      
-      preprocessed_text = preprocess_text(text)
-      
-      embeddings = model.encode(preprocessed_text)
-      
-      return embeddings
+embedded_chunks = []
+chunk_metadata = []
+
+def embed_chunks(documents):
+    chunks = chunk_documents(documents)
+    texts = [clean_text(c["text"]) for c in chunks]
+    vectors = model.encode(texts)
+    global embedded_chunks, chunk_metadata
+    embedded_chunks = vectors
+    chunk_metadata = chunks
+    return vectors, chunks
+
+def embed_query(query):
+    return model.encode([clean_text(query)])[0]
+
 

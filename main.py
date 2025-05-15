@@ -3,9 +3,15 @@ from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from io import BytesIO
 from pydantic import BaseModel
+from typing import List
+
+from services.embeding import embed_chunks, embed_query
+from services.semanticSearch import semantic_search
+from services.preprocesser import parse_uploaded_files
 
 
 app = FastAPI()
+context_histrory = []
 
 origins = [
     "http://localhost:5173",
@@ -20,20 +26,28 @@ app.add_middleware(
     
 )
 @app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile = File(...)):
-    try:
-        content = await file.read()
-        raw_text = content.decode("utf-8").tolist()
-        filetype = file.filename.split(".")[-1]
-
+class Request(BaseModel):
+    query: str
+    
+async def create_upload_file(files: list[UploadFile] = File(...)):
+        docs = await parse_uploaded_files(files)
+        if not docs:
+            return {"message": "No valid files were parsed."}
         
-        return {"filename": file.filename}
-    except Exception as e:
-        return {"error": f"An error occurred: {str(e)}"}
+        chunks, metadata = embed_chunks(docs)
+        query = " ".join([doc["text"] for doc in docs])
+        query_vec = embed_query(query)
+        results = semantic_search(query_vec)
+        return {
+            "message": "Files processed",
+            "chunks": len(chunks),
+            "top_3_results": results
+    }
+   
 
 @app.get("/uploaddone")
 async def read_root():
-    return {"message": "welcome to the file upload  API"}
+    return {"message": "File uploaded successfully"}
 
 
 class QueryRequest(BaseModel):
